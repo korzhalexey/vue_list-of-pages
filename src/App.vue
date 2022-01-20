@@ -1,26 +1,258 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container">
+    <h1 class="title">List of notes</h1>
+    <div class="form-control">
+      <input
+          type="text"
+          :placeholder="placeholderString"
+          v-model="inputValue"
+          @keypress.enter="addNote"
+      >
+    </div>
+    <button
+        type="button"
+        class="btn"
+        @click="addNote"
+    >
+      Добавить
+    </button>
+    <hr/>
+    <ul class="list">
+      <li
+          class="list-item"
+          v-for="(note, index) in notes"
+          :key="index"
+      >
+        <span>{{ `${index + 1}. ${note}` }}</span>
+        <button
+            type="button"
+            class="btn danger"
+            @click="deleteNote(index)"
+        >
+          delete
+        </button>
+      </li>
+    </ul>
+    <hr/>
+    <p>
+      Total amount of notes: {{ notes.length }} | Double: {{ doubleNotesLength }}
+    </p>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  components: {},
+  data() {
+    return {
+      inputValue: '',
+      notes: ['Note #1', 'Note #2', 'Note #3'],
+      placeholderString: 'Enter a note',
+    };
+  },
+
+  methods: {
+    addNote() {
+      const { inputValue, notes } = this;
+
+      if (inputValue) {
+        notes.push(inputValue);
+        this.inputValue = '';
+      }
+    },
+    deleteNote(index) {
+      this.notes.splice(index, 1);
+    },
+  },
+
+  computed: {
+    doubleNotesLength() {
+      return this.notes.length * 2
+    }
+  },
+
+  watch: {
+    inputValue() {
+      if (this.inputValue.length > 20) {
+        this.inputValue = '';
+      }
+    }
   }
-}
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Inter, Roboto, Oxygen, Fira Sans, Helvetica Neue, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  font-size: 16px;
+  background: #2c3e50;
 }
+
+hr {
+  margin: 1rem 0;
+}
+
+strong,
+.bold {
+  font-weight: 500;
+}
+
+ol,
+p,
+ul {
+  line-height: 1.7;
+}
+
+a {
+  color: #3eaf7c;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+h1 {
+  font-size: 2.2rem;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 1.65rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid #eaecef;
+}
+
+h3 {
+  font-size: 1.35rem;
+}
+
+.primary {
+  color: #42b983;
+}
+
+.danger {
+  color: #e53935;
+}
+
+.btn {
+  color: #42b983;
+  position: relative;
+  place-content: center;
+  place-items: center;
+  width: fit-content;
+  border-radius: 99px;
+  letter-spacing: 0.05em;
+  border: 1px solid #42b983;
+  text-decoration: none;
+  text-transform: uppercase;
+  margin-right: 10px;
+  padding: 0.5rem 1.5rem;
+  white-space: nowrap;
+  font-weight: 700;
+  outline: none;
+  background: #fff;
+  transition: all 0.22s;
+}
+
+.btn:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.btn:active {
+  box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.btn.primary {
+  background: #42b983;
+  color: #fff;
+}
+
+.btn.danger {
+  background: #e53935;
+  color: #fff;
+  border-color: #e53935;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1000px;
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 10px 20px;
+}
+
+.pt-5 {
+  padding-top: 5rem;
+}
+
+.form-control {
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.form-control input {
+  margin: 0;
+  outline: none;
+  border: 2px solid #ccc;
+  display: block;
+  width: 100%;
+  color: #2c3e50;
+  padding: 0.5rem 1.5rem;
+  border-radius: 3px;
+  font-size: 1rem;
+}
+
+.form-control label {
+  display: block;
+  margin: 0 0 0.3rem 0.3rem;
+  font-weight: 500;
+}
+
+.form-control input:active,
+.form-control input:focus {
+  transition: border 0.22s;
+  border: 2px solid #42b983;
+}
+
+.card {
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.2);
+  background: #fff;
+}
+
+.card.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.list {
+  margin: 0;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+}
+
 </style>
